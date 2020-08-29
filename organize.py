@@ -42,7 +42,7 @@ parser.add_argument(
 parser.add_argument(
     "-l",
     "--log",
-    help="The moved files and destination will be logged in the terminal and saved",
+    help="The moved files and destination will be logged in the terminal",
     action="store_true",
 )
 
