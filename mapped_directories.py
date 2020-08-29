@@ -1,4 +1,4 @@
-DIRECTORIES = {
+EXTENSIONS = {
     "HTML": [".html5", ".html", ".htm", ".xhtml"],
     "IMAGES": [
         ".jpeg",
