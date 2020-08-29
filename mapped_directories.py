@@ -84,7 +84,6 @@ DIRECTORIES = {
     "PLAINTEXT": [".txt", ".in", ".out"],
     "PDF": [".pdf"],
     "PYTHON": [".py"],
-    "XML": [".xml"],
     "EXE": [".exe"],
     "SHELL": [".sh"],
     "ASP Classic": [".asp"],
