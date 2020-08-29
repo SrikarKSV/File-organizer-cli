@@ -6,7 +6,7 @@ import argparse
 import logging
 import sys
 
-logging.basicConfig()
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s:%(message)s")
 
 parser = argparse.ArgumentParser(
     description="Organize the files in a folder into their respective category"
@@ -39,6 +39,13 @@ parser.add_argument(
     metavar="",
 )
 
+parser.add_argument(
+    "-l",
+    "--log",
+    help="The moved files and destination will be logged in the terminal and saved",
+    action="store_true",
+)
+
 args = parser.parse_args()
 
 
@@ -52,7 +59,7 @@ def get_directories():
         sys.exit()
 
     input_file = pathlib.Path(input)
-    assert input_file.is_file(), f"No text file with name {input_file.name}"
+    assert input_file.exists(), f"No text file with name {input_file.name}"
 
     directories = []
     with open(input_file, encoding="utf-8") as f:
@@ -69,7 +76,7 @@ def organize_files():
         assert DIRECTORY.exists(), "Wrong path provided"
         unorganized_files = [file for file in DIRECTORY.iterdir() if file.is_file()]
 
-        for file in unorganized_files:
+        for i, file in enumerate(unorganized_files):
             unorganized_file_extension = file.suffix
             if unorganized_file_extension not in args.exclude:
                 for folder in EXTENSIONS:
@@ -77,7 +84,12 @@ def organize_files():
                     if unorganized_file_extension in extension_list:
                         folder_directory = DIRECTORY / folder
                         folder_directory.mkdir(exist_ok=True)
-                        shutil.move(str(file), str(folder_directory))
+                        try:
+                            shutil.move(str(file), str(folder_directory))
+                            if args.log:
+                                logging.debug(f"{file.name} is moved to {folder}")
+                        except shutil.Error as e:
+                            logging.debug(e)
 
 
 if __name__ == "__main__":
