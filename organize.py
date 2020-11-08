@@ -6,7 +6,7 @@ import argparse
 import logging
 import sys
 
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s:%(message)s")
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s: %(message)s")
 
 parser = argparse.ArgumentParser(
     description="Organize the files in a folder into their respective category"
@@ -73,23 +73,24 @@ def organize_files():
     directories = get_directories()
     for path in directories:
         DIRECTORY = Path(path)
-        assert DIRECTORY.exists(), "Wrong path provided"
+        assert DIRECTORY.exists(), "Given directory path does not exist"
         unorganized_files = [file for file in DIRECTORY.iterdir() if file.is_file()]
 
         for i, file in enumerate(unorganized_files):
             unorganized_file_extension = file.suffix
-            if unorganized_file_extension not in args.exclude:
-                for folder in EXTENSIONS:
-                    extension_list = EXTENSIONS[folder]
-                    if unorganized_file_extension in extension_list:
-                        folder_directory = DIRECTORY / folder
-                        folder_directory.mkdir(exist_ok=True)
-                        try:
-                            shutil.move(str(file), str(folder_directory))
-                            if args.log:
-                                logging.debug(f"{file.name} is moved to {folder}")
-                        except shutil.Error as e:
-                            logging.debug(e)
+            if unorganized_file_extension in args.exclude:
+                continue
+            for folder in EXTENSIONS:
+                extension_list = EXTENSIONS[folder]
+                if unorganized_file_extension in extension_list:
+                    folder_directory = DIRECTORY / folder
+                    folder_directory.mkdir(exist_ok=True)
+                    try:
+                        shutil.move(str(file), str(folder_directory))
+                        if args.log:
+                            logging.debug(f"{file.name} is moved to {folder}")
+                    except shutil.Error as e:
+                        logging.debug(e)
 
 
 if __name__ == "__main__":
