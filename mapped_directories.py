@@ -92,6 +92,7 @@ EXTENSIONS = {
     "JAVA": [".jsp", ".jspx", ".wss", ".do", ".action"],
     "JAVASCRIPT": [".js"],
     "RUBY": [".rb", ".rhtml"],
+    "GO": [".go"],
     "Data_files": [
         ".dat",
         ".xml",
